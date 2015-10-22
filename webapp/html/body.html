@@ -31,6 +31,10 @@
 <script src="bullet.js"></script>
 <script>
 
+    var p = document.createElement("p");
+    p.innerHTML=window.location.hash.substr(1);
+    document.body.appendChild(p);
+
     var margin = {top: 5, right: 40, bottom: 20, left: 120},
             width = 960 - margin.left - margin.right,
             height = 50 - margin.top - margin.bottom;
