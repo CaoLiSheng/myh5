@@ -16,7 +16,7 @@
             </array>
         </dict>
         <key>PayloadOrganization</key>
-        <string>192.168.2.212:4000</string>
+        <string>dev.yangaiche.com</string>
         <key>PayloadDisplayName</key>
         <string>Profile Service</string>
         <key>PayloadVersion</key>
@@ -24,7 +24,7 @@
         <key>PayloadUUID</key>
         <string>9CF421B3-9853-4454-BC8A-982CBD3C907C</string>
         <key>PayloadIdentifier</key>
-        <string>com.yangaiche.www.profile-service</string>
+        <string>com.yangaiche.dev</string>
         <key>PayloadDescription</key>
         <string>This temporary profile will be used to find and display your current device's UDID.</string>
         <key>PayloadType</key>
