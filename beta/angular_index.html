@@ -1,97 +1,43 @@
 <!DOCTYPE html>
-<html ng-app="myApp" ng-controller="myCtrl">
+<html ng-app="myApp" ng-controller="MyCtrl">
 <head>
     <meta charset="UTF-8">
     <title>myApp</title>
 
-    <!-- Semantic UI CSS -->
-    <link href="./lib/semantic/semantic.css" rel="stylesheet">
     <!-- jQuery -->
     <script type="text/javascript" src="./lib/jquery/jquery.js"></script>
+
+    <!-- Moments -->
+    <script type="text/javascript" src="./lib/moment/moment.js"></script>
+
+    <!-- Semantic UI CSS -->
+    <link href="./lib/semantic/semantic.css" rel="stylesheet">
     <!-- Semantic UI JS -->
     <script type="text/javascript" src="./lib/semantic/semantic.js"></script>
+
+    <!-- Date Range CSS -->
+    <link href="./lib/daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Date Range JS -->
+    <script type="text/javascript" src="./lib/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Load c3.css -->
+    <link href="./lib/c3/c3.css" rel="stylesheet" type="text/css">
+
+    <!-- Load d3.js and c3.js -->
+    <script type="text/javascript" src="./lib/d3/d3.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./lib/c3/c3.js"></script>
+
+    <!-- EChart -->
+    <script type="text/javascript" src="./lib/echart/echarts.js"></script>
 
     <!-- AngularJs Core -->
     <script type="text/javascript" src="./lib/angular/angular.js"></script>
     <!-- AngularJs UI-Router -->
     <script type="text/javascript" src="./lib/angular/angular-ui-router.min.js"></script>
 
-    <!-- Load c3.css -->
-    <link href="./lib/c3/c3.css" rel="stylesheet" type="text/css">
-
-    <!-- Load d3.js and c3.js -->
-    <script src="./lib/d3/d3.js" charset="utf-8"></script>
-    <script src="./lib/c3/c3.js"></script>
-
-    <style>
-        *, *:before, *:after {
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-        iframe {
-            width: 100%;
-            min-height: 100%;
-
-            overflow: auto;
-
-            background: #FFF;
-        }
-
-        .nav-sidebar, .content {
-            float: left;
-
-            height: 100%;
-
-            overflow: auto;
-
-            transition: 0.3s;
-            -moz-transition: 0.3s;
-            -webkit-transition: 0.3s;
-            -o-transition: 0.3s;
-        }
-
-        .nav-sidebar {
-            width: 10%;
-        }
-
-        .nav-inner {
-            margin-top: 5vh;
-        }
-
-        .content {
-            width: 90%;
-        }
-
-        .fullscreen .nav-sidebar {
-            width: 0;
-        }
-
-        .fullscreen .content {
-            width: 100%;
-        }
-
-        .nav-toggle {
-            display: block;
-
-            position: fixed;
-            left: 0;
-            right: 0;
-
-            width: 10%;
-            height: 5vh;
-
-            background: rgba(0, 0, 0, 0.6);
-
-            line-height: 5vh;
-            text-align: center;
-
-            color: #FFF;
-
-            cursor: pointer;
-        }
-    </style>
+    <!-- This Page's CSS -->
+    <link href="./css/angular_index.css" rel="stylesheet" type="text/css">
 </head>
 <body class="{{fullscreen}}">
 
@@ -101,9 +47,9 @@
     <div class="nav-inner">
         <a class="brand" href="#">Quick Start</a>
         <ul class="nav">
-            <li><a ui-sref="route1">Route 1</a></li>
+            <li><a ui-sref="route1">Echart Demo</a></li>
             <li><a ui-sref="route2">Route 2</a></li>
-            <li><a ui-sref="route3">Route 3</a></li>
+            <li><a ui-sref="route3">客户统计</a></li>
         </ul>
     </div>
 </div>
@@ -113,12 +59,168 @@
 <script>
     var app = angular.module('myApp', ["ui.router"]);
 
-    app.controller('myCtrl', function ($scope) {
+    app.controller('MyCtrl', function ($scope) {
         var toggle_fullscreen = true;
         $scope.toggle = function () {
             $scope.fullscreen = toggle_fullscreen ? 'fullscreen' : '';
             toggle_fullscreen = !toggle_fullscreen;
         };
+    });
+
+    app.controller('StatisticCtrl', function ($scope, $http) {
+        $scope.dateRange = '选择时间';
+        $scope.statisticName = '';
+        $scope.postfix = ' 00:00:00';
+
+        $('input[name="daterange"]')
+                .daterangepicker({
+                    "locale": {
+                        "format": "MM/DD/YYYY",
+                        "separator": " - ",
+                        "applyLabel": "应用",
+                        "cancelLabel": "取消",
+                        "fromLabel": "从",
+                        "toLabel": "到",
+                        "customRangeLabel": "自定义",
+                        "daysOfWeek": [
+                            "日",
+                            "一",
+                            "二",
+                            "三",
+                            "四",
+                            "五",
+                            "六"
+                        ],
+                        "monthNames": [
+                            "一月",
+                            "二月",
+                            "三月",
+                            "四月",
+                            "五月",
+                            "六月",
+                            "七月",
+                            "八月",
+                            "九月",
+                            "十月",
+                            "十一月",
+                            "十二月"
+                        ],
+                        "firstDay": 1
+                    },
+                    "startDate": "10/21/2015",
+                    "endDate": "10/27/2015"
+                })
+                .on('apply.daterangepicker', function (ev, picker) {
+                    $scope.start = picker.startDate.format('YYYY-MM-DD') + $scope.postfix;
+                    $scope.end = picker.endDate.format('YYYY-MM-DD') + $scope.postfix;
+                })
+        ;
+
+        $('.ui.checkbox')
+                .checkbox()
+        ;
+
+        $('select.dropdown')
+                .dropdown()
+        ;
+
+        $scope.statistic = function () {
+
+            if (!($scope.start && $scope.end)) {
+                alert('参数不够');
+                console.log($scope);
+                return;
+            }
+
+            $http({
+                method: 'GET',
+                url: '/api/v1/statistic/order_repeated_bought_user_counts?start_time=' + $scope.start + '&end_time=' + $scope.end
+            }).then(function (response) {
+                // 路径配置
+                require.config({
+                    paths: {
+                        echarts: './lib/echart'
+                    }
+                });
+
+                // 使用
+                require(
+                        [
+                            'echarts',
+                            'echarts/chart/line', // 按需加载
+                            'echarts/chart/bar' // 按需加载
+                        ],
+                        function (ec) {
+                            // 基于准备好的dom，初始化echarts图表
+                            var myChart = ec.init(document.getElementById('main'));
+
+                            var option = {
+                                title: {
+                                    text: $scope.statisticName,
+                                    subtext: '纯属虚构'
+                                },
+                                tooltip: {
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    data: [$scope.statisticName]
+                                },
+                                toolbox: {
+                                    show: true,
+                                    feature: {
+                                        mark: {show: true},
+                                        dataView: {show: true, readOnly: false},
+                                        magicType: {show: true, type: ['line', 'bar']},
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                calculable: true,
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        boundaryGap: false,
+                                        data: response.data.data.x
+                                    }
+                                ],
+                                yAxis: [
+                                    {
+                                        type: 'value',
+                                        axisLabel: {
+                                            formatter: '{value} 人'
+                                        }
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name: '复购行为',
+                                        type: 'line',
+                                        data: response.data.data.y_1,
+                                        markPoint: {
+                                            data: [
+                                                {type: 'max', name: '最大值'},
+                                                {type: 'min', name: '最小值'}
+                                            ]
+                                        },
+                                        markLine: {
+                                            data: [
+                                                {type: 'average', name: '平均值'}
+                                            ]
+                                        }
+                                    }
+                                ]
+                            };
+
+                            // 为echarts对象加载数据
+                            myChart.setOption(option);
+                        }
+                );
+            }, function (response) {
+                alert(JSON.stringify(response));
+            });
+
+        };
+
     });
 
     app.config(function ($stateProvider, $urlRouterProvider) {
@@ -129,21 +231,19 @@
         $stateProvider
                 .state('route1', {
                     url: "/route1",
-                    templateUrl: "template/iframe_wrapper.html",
-                    controller: function ($scope) {
-                        $scope.iframe_dest = 'http://192.168.2.212/error/404.html';
-                    }
+                    templateUrl: "template/chart/echart_demo.html"
                 })
                 .state('route2', {
                     url: "/route2",
                     templateUrl: "template/iframe_wrapper.html",
                     controller: function ($scope) {
-                        $scope.iframe_dest = 'http://192.168.2.212/bk/';
+                        $scope.iframe_dest = 'http://192.168.3.235/bk/';
                     }
                 })
                 .state('route3', {
                     url: "/route3",
-                    templateUrl: "template/chart/demo.html"
+                    templateUrl: "template/statistics/clients.html",
+                    controller: 'StatisticCtrl'
                 })
     });
 </script>

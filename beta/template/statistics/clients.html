@@ -1,0 +1,54 @@
+<h1 class="ui header"> HIVE </h1>
+
+<h4 class="ui horizontal divider header"><i class="line chart icon"></i> 客户 </h4>
+
+<div class="ui middle aligned container">
+    <form class="ui form">
+        <div class="field">
+            <div class="three fields">
+                <div class="field">
+                    <input name="daterange" placeholder="选择时间范围" ng-model="dateRange">
+                </div>
+                <div class="field">
+                    <select class="ui fluid dropdown">
+                        <option value="">统计内容</option>
+                        <option value="api_1">有重复购买行为的用户数</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="three fields">
+                <div class="field">
+                    <div class="ui toggle checkbox">
+                        <input class="hidden" tabindex="0" name="gift" type="checkbox">
+                        <label> 是否动态时间 </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui toggle checkbox">
+                        <input class="hidden" tabindex="0" name="gift" type="checkbox">
+                        <label> 标识时间点 </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="three fields">
+                <div class="field"></div>
+                <div class="field">
+                    <div class="ui right aligned container">
+                        <div class="ui buttons">
+                            <button class="ui button" ng-click="statistic()"> 统计</button>
+                            <div class="or"></div>
+                            <button class="ui button" ng-click="sendStatistic()"> 发送到统计</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="field"></div>
+            </div>
+        </div>
+    </form>
+
+    <div id="main" class="ui segment" style="height: 400px;"></div>
+</div>
