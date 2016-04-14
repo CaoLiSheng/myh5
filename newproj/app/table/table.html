@@ -1,0 +1,21 @@
+<style>
+    td {
+        width: 200px;
+        height: 50px;
+        border: dashed 1px #666666;
+    }
+
+    td > * {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+</style>
+<table ff-table>
+    <tbody ff-table-body>
+        <tr ng-repeat="row in rows">
+            <td ff-input="row.a"></td>
+            <td ff-input="row.b"></td>
+        </tr>
+    </tbody>
+</table>
